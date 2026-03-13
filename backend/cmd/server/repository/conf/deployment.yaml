@@ -58,3 +58,7 @@ passkey:
 
 authn_provider:
   type: "mosip"
+  
+consent:
+  enabled: true
+  base_url: "http://localhost:4000/api/v1"

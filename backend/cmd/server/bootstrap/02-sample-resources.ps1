@@ -170,14 +170,18 @@ $appData = @{
     policy_uri = "https://localhost:3000/privacy"
     contacts = @("admin@example.com", "support@example.com")
     is_registration_flow_enabled = $true
-    user_attributes = @("given_name","family_name","email","groups")
+    user_attributes = @("given_name","family_name","email")
     allowed_user_types = @("Customer")
+    login_consent = @{
+        enabled = $true
+        validity_period = 120
+    }
     inbound_auth_config = @(
         @{
             type = "oauth2"
             config = @{
                 client_id = "sample_app_client"
-                redirect_uris = @("https://localhost:3000")
+                redirect_uris = @("https://localhost:3000","https://oidcdebugger.com/debug")
                 grant_types = @("authorization_code")
                 response_types = @("code")
                 token_endpoint_auth_method = "none"
@@ -187,18 +191,18 @@ $appData = @{
                 token = @{
                     access_token = @{
                         validity_period = 3600
-                        user_attributes = @("given_name","family_name","email","groups")
+                        user_attributes = @("name", "given_name","family_name","email")
                     }
                     id_token = @{
                         validity_period = 3600
-                        user_attributes = @("given_name","family_name","email","groups")
+                        user_attributes = @("name", "given_name","family_name","email")
                     }
                 }
                 scope_claims = @{
                     profile = @("name","given_name","family_name","picture")
                     email = @("email","email_verified")
                     phone = @("phone_number","phone_number_verified")
-                    group = @("groups")
+                    group = @()
                 }
             }
         }
