@@ -182,7 +182,7 @@ func (js *jwtService) GenerateJWT(
 		return "", 0, &serviceerror.InternalServerError
 	}
 
-	thunderRuntime := config.GetServerRuntime()
+	serverRuntime := config.GetServerRuntime()
 
 	// Create the JWT header.
 	if typ == "" {
@@ -202,12 +202,12 @@ func (js *jwtService) GenerateJWT(
 
 	tokenIssuer := iss
 	if tokenIssuer == "" {
-		tokenIssuer = thunderRuntime.Config.JWT.Issuer
+		tokenIssuer = serverRuntime.Config.JWT.Issuer
 	}
 
 	// Calculate the expiration time based on the validity period.
 	if validityPeriod == 0 {
-		validityPeriod = thunderRuntime.Config.JWT.ValidityPeriod
+		validityPeriod = serverRuntime.Config.JWT.ValidityPeriod
 	}
 	iat := time.Now()
 	expirationTime := iat.Add(time.Duration(validityPeriod) * time.Second).Unix()
