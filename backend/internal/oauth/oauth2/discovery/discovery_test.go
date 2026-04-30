@@ -78,7 +78,7 @@ func (suite *DiscoveryTestSuite) SetupTest() {
 			HTTPOnly: false,
 		},
 		JWT: config.JWTConfig{
-			Issuer:         "https://test.thunder.io",
+			Issuer:         "https://auth.example.com",
 			ValidityPeriod: 3600,
 		},
 	}
@@ -311,7 +311,7 @@ func (suite *DiscoveryTestSuite) TestGetBaseURL_WithPublicHostname() {
 			Port:      8080,
 		},
 		JWT: config.JWTConfig{
-			Issuer: "https://test.thunder.io",
+			Issuer: "https://auth.example.com",
 		},
 	}
 	_ = config.InitializeServerRuntime("test", testConfig)
@@ -331,7 +331,7 @@ func (suite *DiscoveryTestSuite) TestGetBaseURL_WithHTTPOnly() {
 			HTTPOnly: true,
 		},
 		JWT: config.JWTConfig{
-			Issuer: "https://test.thunder.io",
+			Issuer: "https://auth.example.com",
 		},
 	}
 	_ = config.InitializeServerRuntime("test", testConfig)

@@ -137,7 +137,7 @@ func (suite *JWTServiceTestSuite) SetupTest() {
 			KeyFile: suite.testKeyPath,
 		},
 		JWT: config.JWTConfig{
-			Issuer:         "https://test.thunder.io",
+			Issuer:         "https://auth.example.com",
 			ValidityPeriod: 3600, // Default validity period
 			PreferredKeyID: "test-kid",
 			Leeway:         30, // 30 seconds leeway for clock skew
@@ -2462,7 +2462,7 @@ func (suite *JWTServiceTestSuite) TestVerifyJWTWithZeroLeeway() {
 			KeyFile: suite.testKeyPath,
 		},
 		JWT: config.JWTConfig{
-			Issuer:         "https://test.thunder.io",
+			Issuer:         "https://auth.example.com",
 			ValidityPeriod: 3600,
 			PreferredKeyID: "test-kid",
 			Leeway:         0, // No leeway

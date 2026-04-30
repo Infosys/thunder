@@ -97,7 +97,7 @@ func (suite *InitTestSuite) TestInitialize_Success() {
 	// Setup test configuration
 	testConfig := &config.Config{
 		JWT: config.JWTConfig{
-			Issuer:         "https://test.thunder.io",
+			Issuer:         "https://auth.example.com",
 			ValidityPeriod: 3600,
 			PreferredKeyID: "test-kid",
 		},
@@ -130,7 +130,7 @@ func (suite *InitTestSuite) TestInitialize_PrivateKeyRetrievalError() {
 	// Setup test configuration
 	testConfig := &config.Config{
 		JWT: config.JWTConfig{
-			Issuer:         "https://test.thunder.io",
+			Issuer:         "https://auth.example.com",
 			ValidityPeriod: 3600,
 			PreferredKeyID: "test-kid",
 		},
@@ -165,7 +165,7 @@ func (suite *InitTestSuite) TestInitialize_WithoutPreferredKeyID() {
 	// Setup test configuration without PreferredKeyID
 	testConfig := &config.Config{
 		JWT: config.JWTConfig{
-			Issuer:         "https://test.thunder.io",
+			Issuer:         "https://auth.example.com",
 			ValidityPeriod: 3600,
 			// PreferredKeyID is empty
 		},

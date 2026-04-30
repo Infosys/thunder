@@ -70,7 +70,7 @@ func TestTokenExchangeGrantHandlerSuite(t *testing.T) {
 func (suite *TokenExchangeGrantHandlerTestSuite) SetupTest() {
 	testConfig := &config.Config{
 		JWT: config.JWTConfig{
-			Issuer:         "https://test.thunder.io",
+			Issuer:         "https://auth.example.com",
 			ValidityPeriod: 3600,
 			Audience:       "application", // Default audience for tests
 		},
@@ -1013,7 +1013,7 @@ func (suite *TokenExchangeGrantHandlerTestSuite) TestHandleGrant_UsesDefaultConf
 	now := time.Now().Unix()
 	subjectToken := suite.createTestJWT(map[string]interface{}{
 		"sub": "user123",
-		"iss": "https://test.thunder.io", // Use default config issuer since oauthApp has no Token config
+		"iss": "https://auth.example.com", // Use default config issuer since oauthApp has no Token config
 		"exp": float64(now + 3600),
 		"nbf": float64(now - 60),
 	})

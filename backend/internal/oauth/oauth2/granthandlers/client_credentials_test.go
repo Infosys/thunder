@@ -72,7 +72,7 @@ func (suite *ClientCredentialsGrantHandlerTestSuite) SetupTest() {
 	// Initialize Runtime for tests
 	testConfig := &config.Config{
 		JWT: config.JWTConfig{
-			Issuer:         "https://test.thunder.io",
+			Issuer:         "https://auth.example.com",
 			ValidityPeriod: 3600,
 		},
 	}
