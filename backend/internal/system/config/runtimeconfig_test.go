@@ -93,7 +93,7 @@ func (suite *RuntimeConfigTestSuite) TestInitializeThunderRuntimeOnlyOnce() {
 	assert.Equal(suite.T(), 8000, runtime.Config.Server.Port)
 }
 
-func (suite *RuntimeConfigTestSuite) TestGetThunderRuntime() {
+func (suite *RuntimeConfigTestSuite) TestGetServerRuntime() {
 	config := &Config{
 		Server: ServerConfig{
 			Hostname: "gettest",
@@ -111,7 +111,7 @@ func (suite *RuntimeConfigTestSuite) TestGetThunderRuntime() {
 	assert.Equal(suite.T(), "gettest", runtime.Config.Server.Hostname)
 }
 
-func (suite *RuntimeConfigTestSuite) TestGetThunderRuntimePanic() {
+func (suite *RuntimeConfigTestSuite) TestGetServerRuntimePanic() {
 	runtimeConfig = nil
 
 	assert.Panics(suite.T(), func() {
