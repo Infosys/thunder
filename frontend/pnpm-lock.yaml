@@ -322,7 +322,7 @@ importers:
       '@thunderid/components':
         specifier: workspace:^
         version: link:../../packages/components
-      '@thunder/configure-organization-units':
+      '@thunderid/configure-organization-units':
         specifier: workspace:^
         version: link:../../packages/configure-organization-units
       '@thunder/configure-translations':
@@ -952,7 +952,7 @@ importers:
       '@testing-library/user-event':
         specifier: 'catalog:'
         version: 14.6.1(@testing-library/dom@10.4.1)
-      '@thunder/configure-organization-units':
+      '@thunderid/configure-organization-units':
         specifier: workspace:^
         version: link:../configure-organization-units
       '@thunderid/eslint-plugin-thunder':

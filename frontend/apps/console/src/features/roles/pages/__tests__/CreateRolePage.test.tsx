@@ -25,7 +25,7 @@ import CreateRolePage from '../CreateRolePage';
 // Mock dependencies
 vi.mock('../../api/useCreateRole');
 vi.mock('../../contexts/RoleCreate/useRoleCreate');
-vi.mock('@thunder/configure-organization-units');
+vi.mock('@thunderid/configure-organization-units');
 
 vi.mock('../../components/create-role/ConfigureBasicInfo', () => ({
   default: () => <div data-testid="configure-basic-info">Configure Basic Info</div>,
@@ -54,7 +54,7 @@ vi.mock('@thunderid/logger/react', () => ({
 
 const {default: useCreateRole} = await import('../../api/useCreateRole');
 const {default: useRoleCreate} = await import('../../contexts/RoleCreate/useRoleCreate');
-const {useHasMultipleOUs} = await import('@thunder/configure-organization-units');
+const {useHasMultipleOUs} = await import('@thunderid/configure-organization-units');
 const {useNavigate} = await import('react-router');
 
 describe('CreateRolePage', () => {

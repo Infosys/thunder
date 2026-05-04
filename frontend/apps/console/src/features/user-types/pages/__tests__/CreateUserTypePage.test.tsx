@@ -55,7 +55,7 @@ vi.mock('../../api/useCreateUserType', () => ({
 }));
 
 // Mock useHasMultipleOUs (used by ConfigureGeneral to decide whether to show the OU picker)
-vi.mock('@thunder/configure-organization-units', () => ({
+vi.mock('@thunderid/configure-organization-units', () => ({
   useHasMultipleOUs: () => ({
     hasMultipleOUs: true,
     isLoading: false,

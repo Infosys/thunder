@@ -17,7 +17,7 @@
  */
 
 import {SettingsCard} from '@thunderid/components';
-import {OrganizationUnitTreePicker} from '@thunder/configure-organization-units';
+import {OrganizationUnitTreePicker} from '@thunderid/configure-organization-units';
 import {useResolveDisplayName} from '@thunder/hooks';
 import {Stack, Typography, Button, Select, MenuItem} from '@wso2/oxygen-ui';
 import type {JSX} from 'react';

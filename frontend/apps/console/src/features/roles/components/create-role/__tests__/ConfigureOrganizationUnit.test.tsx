@@ -23,7 +23,7 @@ import ConfigureOrganizationUnit from '../ConfigureOrganizationUnit';
 import type {ConfigureOrganizationUnitProps} from '../ConfigureOrganizationUnit';
 
 // Mock OrganizationUnitTreePicker
-vi.mock('@thunder/configure-organization-units', () => ({
+vi.mock('@thunderid/configure-organization-units', () => ({
   OrganizationUnitTreePicker: ({value, onChange}: {value: string; onChange: (ouId: string) => void}) => (
     <div data-testid="ou-tree-picker">
       <span data-testid="ou-picker-value">{value}</span>

@@ -28,7 +28,7 @@ import {
   type InviteUserRenderProps,
 } from '@asgardeo/react';
 import {zodResolver} from '@hookform/resolvers/zod';
-import {OrganizationUnitTreePicker} from '@thunder/configure-organization-units';
+import {OrganizationUnitTreePicker} from '@thunderid/configure-organization-units';
 import {CopyableTextAdapter, type FlowComponent} from '@thunder/design';
 import {useLogger} from '@thunderid/logger/react';
 import {

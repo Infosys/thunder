@@ -43,7 +43,7 @@ vi.mock('../../api/useCreateGroup', () => ({
 }));
 
 const mockUseHasMultipleOUs = vi.fn();
-vi.mock('@thunder/configure-organization-units', () => ({
+vi.mock('@thunderid/configure-organization-units', () => ({
   OrganizationUnitTreePicker: ({value, onChange}: {value: string; onChange: (id: string) => void}) => (
     <div data-testid="ou-tree-picker">
       <span data-testid="ou-value">{value}</span>

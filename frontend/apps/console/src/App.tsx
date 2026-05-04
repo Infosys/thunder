@@ -22,7 +22,7 @@ import {
   OrganizationUnitProvider,
   OrganizationUnitEditPage,
   OrganizationUnitsListPage,
-} from '@thunder/configure-organization-units';
+} from '@thunderid/configure-organization-units';
 import {
   TranslationCreateProvider,
   TranslationCreatePage,
