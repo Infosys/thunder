@@ -1,6 +1,6 @@
 # @thunderid/logger
 
-Universal TypeScript logging library with pluggable transports for Thunder applications. Works seamlessly with vanilla
+Universal TypeScript logging library with pluggable transports for ThunderID applications. Works seamlessly with vanilla
 JavaScript, React, Vite, and Next.js applications.
 
 ## Features

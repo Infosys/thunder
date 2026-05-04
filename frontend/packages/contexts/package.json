@@ -1,9 +1,9 @@
 {
   "name": "@thunderid/contexts",
   "version": "0.0.0",
-  "description": "Shared React contexts for ⚡️ Thunder applications",
+  "description": "Shared React contexts for ⚡️ ThunderID applications",
   "keywords": [
-    "thunder",
+    "thunderid",
     "contexts",
     "react",
     "shareable",

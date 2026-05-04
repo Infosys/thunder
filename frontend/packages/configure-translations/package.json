@@ -1,9 +1,9 @@
 {
   "name": "@thunderid/configure-translations",
   "version": "0.0.0",
-  "description": "Translations feature for ⚡️ Thunder applications",
+  "description": "Translations feature for ⚡️ ThunderID applications",
   "keywords": [
-    "thunder",
+    "thunderid",
     "configure",
     "translations",
     "react",

@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "@thunder/frontend",
+  "name": "@thunderid/frontend",
   "version": "0.0.0",
-  "description": "Frontend workspace for ⚡️ Thunder",
+  "description": "Frontend workspace for ⚡️ ThunderID",
   "author": "WSO2",
   "license": "Apache-2.0",
   "type": "module",
@@ -16,7 +16,7 @@
   },
   "keywords": [
     "asgardeo",
-    "thunder",
+    "thunderid",
     "frontend",
     "workspace",
     "wso2"

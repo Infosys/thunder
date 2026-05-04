@@ -186,7 +186,7 @@ describe('getWorkspaceInfo', () => {
 
     mkdirSync(frontendDir, {recursive: true});
 
-    writeFileSync(join(frontendDir, 'package.json'), JSON.stringify({name: '@company/thunder-app'}));
+    writeFileSync(join(frontendDir, 'package.json'), JSON.stringify({name: '@company/app'}));
     writeFileSync(join(frontendDir, 'nx.json'), JSON.stringify({}));
 
     process.chdir(testDir);

@@ -61,7 +61,7 @@ export default function getWorkspaceInfo(): WorkspaceInfo {
           typeof parsed === 'object' && parsed !== null && 'name' in parsed
             ? (parsed as Record<string, unknown>)['name']
             : undefined;
-        if (typeof name === 'string' && name.includes('thunder')) {
+        if (typeof name === 'string' && name.includes('thunderid')) {
           thunderRoot = currentDir;
           break;
         }

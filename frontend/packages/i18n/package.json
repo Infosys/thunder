@@ -1,7 +1,7 @@
 {
   "name": "@thunderid/i18n",
   "version": "0.0.0",
-  "description": "Translation resources for Thunder applications",
+  "description": "Translation resources for ThunderID applications",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -52,7 +52,7 @@
     "i18n",
     "internationalization",
     "react-i18next",
-    "thunder",
+    "thunderid",
     "translations"
   ],
   "author": "WSO2",

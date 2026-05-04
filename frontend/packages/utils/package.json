@@ -1,9 +1,9 @@
 {
   "name": "@thunderid/utils",
   "version": "0.0.0",
-  "description": "Utilities for ⚡️ Thunder frontends",
+  "description": "Utilities for ⚡️ ThunderID frontends",
   "keywords": [
-    "thunder",
+    "thunderid",
     "utils",
     "utility",
     "typescript",

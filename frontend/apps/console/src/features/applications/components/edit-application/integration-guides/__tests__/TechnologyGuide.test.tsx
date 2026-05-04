@@ -26,7 +26,7 @@ vi.mock('@thunderid/contexts', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {
     ...actual,
-    useConfig: () => ({config: {brand: {product_name: 'Thunder'}}}),
+    useConfig: () => ({config: {brand: {product_name: 'ThunderID'}}}),
   };
 });
 

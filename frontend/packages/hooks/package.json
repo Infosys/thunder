@@ -1,9 +1,9 @@
 {
   "name": "@thunderid/hooks",
   "version": "0.0.0",
-  "description": "Shared React hooks for ⚡️ Thunder applications",
+  "description": "Shared React hooks for ⚡️ ThunderID applications",
   "keywords": [
-    "thunder",
+    "thunderid",
     "hooks",
     "react",
     "shareable",

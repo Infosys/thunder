@@ -79,7 +79,7 @@ describe('CLI Integration', () => {
     // Skipped: Requires full workspace setup
     const {stdout} = await runCLI('--help');
 
-    expect(stdout).toContain('⚡ Thunder Create');
+    expect(stdout).toContain('⚡ ThunderID Create');
     expect(stdout).toContain('Commands:');
     expect(stdout).toContain('feature');
     expect(stdout).toContain('package');

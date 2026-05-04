@@ -1,6 +1,6 @@
 # @thunderid/test-utils
 
-Shared testing utilities for ⚡️ Thunder applications. Provides common test setup, render helpers, and mocks for
+Shared testing utilities for ⚡️ ThunderID applications. Provides common test setup, render helpers, and mocks for
 consistent testing across all apps.
 
 ## Features

@@ -41,7 +41,7 @@ const __dirname: string = dirname(__filename);
 const pkgPath: string = join(__dirname, '../package.json');
 
 const pkg: PackageJson = JSON.parse(readFileSync(pkgPath, 'utf8')) as PackageJson;
-const namespace = 'thunder';
+const namespace = 'thunderid';
 
 const DEV_DEPENDENCIES_ALLOWED_FILES: string[] = [
   '*.config.js',

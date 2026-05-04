@@ -37,22 +37,17 @@ async function main(): Promise<void> {
   console.clear();
 
   intro(
-    `${
-      colors.blueBright(
-        `
-████████╗██╗  ██╗██╗   ██╗███╗   ██╗██████╗ ███████╗██████╗
-╚══██╔══╝██║  ██║██║   ██║████╗  ██║██╔══██╗██╔════╝██╔══██╗
-   ██║   ███████║██║   ██║██╔██╗ ██║██║  ██║█████╗  ██████╔╝`,
-      ) +
-      colors.cyanBright(
-        `
-   ██║   ██╔══██║██║   ██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗
-   ██║   ██║  ██║╚██████╔╝██║ ╚████║██████╔╝███████╗██║  ██║
-   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝
-`,
-      )
-    }\n` +
-      `          ${colors.yellow('⚡')} ${colors.bold(colors.white('Thunder'))}${colors.dim(
+    '\n' +
+      [
+        colors.blueBright('████████╗██╗  ██╗██╗   ██╗███╗   ██╗██████╗ ███████╗██████╗ ') + colors.magentaBright('██╗██████╗'),
+        colors.blueBright('╚══██╔══╝██║  ██║██║   ██║████╗  ██║██╔══██╗██╔════╝██╔══██╗') + colors.magentaBright('██║██╔══██╗'),
+        colors.blueBright('   ██║   ███████║██║   ██║██╔██╗ ██║██║  ██║█████╗  ██████╔╝') + colors.magentaBright('██║██║  ██║'),
+        colors.cyanBright('   ██║   ██╔══██║██║   ██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗') + colors.magentaBright('██║██║  ██║'),
+        colors.cyanBright('   ██║   ██║  ██║╚██████╔╝██║ ╚████║██████╔╝███████╗██║  ██║') + colors.magentaBright('██║██████╔╝'),
+        colors.cyanBright('   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝') + colors.magentaBright('╚═╝╚═════╝'),
+      ].join('\n') +
+      '\n\n' +
+      `          ${colors.yellow('⚡')} ${colors.bold(colors.white('ThunderID'))}${colors.dim(
         colors.gray(' · Frontend Scaffolding Tool'),
       )}\n`,
   );
@@ -75,7 +70,7 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  program.name('create').description('CLI scaffolding tool for ⚡ Thunder frontends').version('0.0.0');
+  program.name('create').description('CLI scaffolding tool for ⚡ ThunderID frontends').version('0.0.0');
 
   program.command('feature').description('Create a new feature module').action(createFeature);
 

@@ -27,7 +27,7 @@ vi.mock('@thunderid/contexts', async (importOriginal) => {
   return {
     ...actual,
     useConfig: () => ({
-      config: {brand: {product_name: 'Thunder'}},
+      config: {brand: {product_name: 'ThunderID'}},
     }),
   };
 });
@@ -110,7 +110,7 @@ describe('WelcomePage', () => {
 
     await user.click(screen.getByRole('button', {name: /common:actions\.close/i}));
 
-    expect(mockSessionStorageSetItem).toHaveBeenCalledWith('thunder:welcome:dismissed', 'true');
+    expect(mockSessionStorageSetItem).toHaveBeenCalledWith('thunderid:welcome:dismissed', 'true');
     expect(mockNavigate).toHaveBeenCalledWith('/home');
   });
 
@@ -121,7 +121,7 @@ describe('WelcomePage', () => {
     const newProjectButton = screen.getByText('common:welcome.start.newProject');
     await user.click(newProjectButton.closest('[role="button"]') ?? newProjectButton);
 
-    expect(mockSessionStorageSetItem).toHaveBeenCalledWith('thunder:welcome:dismissed', 'true');
+    expect(mockSessionStorageSetItem).toHaveBeenCalledWith('thunderid:welcome:dismissed', 'true');
     expect(mockNavigate).toHaveBeenCalledWith('/welcome/create-project');
   });
 
@@ -152,6 +152,6 @@ describe('WelcomePage', () => {
   it('uses product name from config', () => {
     render(<WelcomePage />);
     // The openImportDesc key is interpolated with productName
-    expect(screen.getByText(/openImportDesc.*Thunder/i)).toBeInTheDocument();
+    expect(screen.getByText(/openImportDesc.*ThunderID/i)).toBeInTheDocument();
   });
 });

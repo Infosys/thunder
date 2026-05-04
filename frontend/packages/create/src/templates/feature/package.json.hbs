@@ -1,9 +1,9 @@
 {
   "name": "@thunderid/{{featureType}}-{{featureName}}",
   "version": "0.0.0",
-  "description": "{{featureName}} feature for ⚡️ Thunder applications",
+  "description": "{{featureName}} feature for ⚡️ ThunderID applications",
   "keywords": [
-    "thunder",
+    "thunderid",
     "{{featureType}}",
     "{{featureName}}",
     "react",
@@ -36,7 +36,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/asgardeo/thunder",
-    "directory": "frontend/packages/thunder-{{featureType}}-{{featureName}}"
+    "directory": "frontend/packages/{{featureType}}-{{featureName}}"
   },
   "scripts": {
     "build": "pnpm clean:dist && rolldown -c rolldown.config.js && tsc -p tsconfig.lib.json --emitDeclarationOnly --outDir dist",

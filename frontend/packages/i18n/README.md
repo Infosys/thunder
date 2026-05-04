@@ -1,6 +1,6 @@
 # @thunderid/i18n
 
-Internationalization (i18n) package for Thunder applications using react-i18next with full TypeScript support.
+Internationalization (i18n) package for ThunderID applications using react-i18next with full TypeScript support.
 
 ## Features
 

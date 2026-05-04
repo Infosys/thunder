@@ -1,6 +1,6 @@
 # @thunderid/eslint-plugin
 
-ESLint plugin for ⚡️ Thunder projects with custom rules and configurations.
+ESLint plugin for ⚡️ ThunderID projects with custom rules and configurations.
 
 ## Installation
 
@@ -16,12 +16,12 @@ pnpm add -D @thunderid/eslint-plugin eslint
 
 ```js
 // eslint.config.js
-import thunder from '@thunderid/eslint-plugin';
+import thunderIdPlugin from '@thunderid/eslint-plugin';
 
 export default [
   {
     plugins: {
-      '@thunderid': thunder,
+      '@thunderid': thunderIdPlugin,
     },
     rules: {
       '@thunderid/copyright-header': 'error',
@@ -30,7 +30,7 @@ export default [
     },
   },
   // Or use a predefined config
-  ...thunder.configs.recommended,
+  ...thunderIdPlugin.configs.recommended,
 ];
 ```
 
