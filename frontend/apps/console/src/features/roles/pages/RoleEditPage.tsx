@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import {useToast} from '@thunder/contexts';
+import {useToast} from '@thunderid/contexts';
 import {useLogger} from '@thunderid/logger/react';
 import {
   Box,

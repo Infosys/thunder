@@ -430,7 +430,7 @@ Complete integration example for `apps/console/src/main.tsx`:
 ```tsx
 import * as ReactDOM from 'react-dom/client';
 import {StrictMode} from 'react';
-import {ConfigProvider} from '@thunder/contexts';
+import {ConfigProvider} from '@thunderid/contexts';
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import enUS from '@thunderid/i18n/locales/en-US';

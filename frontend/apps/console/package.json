@@ -54,7 +54,7 @@
     "@thunderid/components": "workspace:^",
     "@thunderid/i18n": "workspace:^",
     "@thunderid/logger": "workspace:^",
-    "@thunder/contexts": "workspace:^",
+    "@thunderid/contexts": "workspace:^",
     "@thunderid/design": "workspace:^",
     "@thunderid/hooks": "workspace:^",
     "@thunderid/configure-users": "workspace:^",

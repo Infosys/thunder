@@ -25,8 +25,8 @@ import useNotificationSenders from '../useNotificationSenders';
 // Mock useConfig
 const mockGetServerUrl = vi.fn(() => 'https://api.example.com');
 
-vi.mock('@thunder/contexts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@thunder/contexts')>();
+vi.mock('@thunderid/contexts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {
     ...actual,
     useConfig: () => ({

@@ -90,7 +90,7 @@ vi.mock('@thunderid/hooks', () => ({
 }));
 
 // Mock useConfig
-vi.mock('@thunder/contexts', () => ({
+vi.mock('@thunderid/contexts', () => ({
   useConfig: () => ({
     getServerUrl: () => 'https://api.example.com',
   }),

@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "@tanstack/react-query": "catalog:",
-    "@thunder/contexts": "workspace:^",
+    "@thunderid/contexts": "workspace:^",
     "@thunderid/eslint-plugin-thunder": "workspace:^",
     "@thunderid/i18n": "workspace:^",
     "@thunderid/logger": "workspace:^",
@@ -90,7 +90,7 @@
   },
   "peerDependencies": {
     "@tanstack/react-query": "catalog:",
-    "@thunder/contexts": "workspace:^",
+    "@thunderid/contexts": "workspace:^",
     "@thunderid/i18n": "workspace:^",
     "@thunderid/logger": "workspace:^",
     "@wso2/oxygen-ui": "catalog:",

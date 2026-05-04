@@ -89,8 +89,8 @@ vi.mock('../../contexts/useOrganizationUnit', async () => {
 
 // Mock config (for tree view)
 const stableConfig = {getServerUrl: () => 'http://localhost:8080'};
-vi.mock('@thunder/contexts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@thunder/contexts')>();
+vi.mock('@thunderid/contexts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {
     ...actual,
     useConfig: () => stableConfig,

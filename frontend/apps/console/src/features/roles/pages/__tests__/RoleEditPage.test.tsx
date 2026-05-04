@@ -68,8 +68,8 @@ vi.mock('@thunderid/logger/react', () => ({
   }),
 }));
 
-vi.mock('@thunder/contexts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@thunder/contexts')>();
+vi.mock('@thunderid/contexts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {
     ...actual,
     useToast: () => ({showToast: vi.fn()}),

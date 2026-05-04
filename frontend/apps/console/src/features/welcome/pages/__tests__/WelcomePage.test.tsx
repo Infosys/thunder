@@ -22,8 +22,8 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 const mockNavigate = vi.fn();
 const mockSessionStorageSetItem = vi.fn();
 
-vi.mock('@thunder/contexts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@thunder/contexts')>();
+vi.mock('@thunderid/contexts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {
     ...actual,
     useConfig: () => ({

@@ -78,7 +78,7 @@
     "@asgardeo/react": "catalog:",
     "@tanstack/react-query": "catalog:",
     "@thunderid/logger": "workspace:^",
-    "@thunder/contexts": "workspace:^",
+    "@thunderid/contexts": "workspace:^",
     "@thunderid/utils": "workspace:^",
     "@wso2/oxygen-ui": "catalog:",
     "@wso2/oxygen-ui-icons-react": "catalog:",

@@ -17,7 +17,7 @@
  */
 
 import {SignOutButton, User, useAsgardeo} from '@asgardeo/react';
-import {useConfig} from '@thunder/contexts';
+import {useConfig} from '@thunderid/contexts';
 import {useLogger} from '@thunderid/logger/react';
 import {
   AppShell,

@@ -124,8 +124,8 @@ vi.mock('@asgardeo/react', () => ({
 }));
 
 // Mock useConfig — stable mockGetServerUrl reference (also in fetchSchemas deps).
-vi.mock('@thunder/contexts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@thunder/contexts')>();
+vi.mock('@thunderid/contexts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {
     ...actual,
     useConfig: () => ({

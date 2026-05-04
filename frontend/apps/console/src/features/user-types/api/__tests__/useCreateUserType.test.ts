@@ -23,13 +23,13 @@ import type {ApiUserSchema, CreateUserSchemaRequest} from '../../types/user-type
 import useCreateUserType from '../useCreateUserType';
 
 vi.mock('@asgardeo/react', () => ({useAsgardeo: vi.fn()}));
-vi.mock('@thunder/contexts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@thunder/contexts')>();
+vi.mock('@thunderid/contexts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {...actual, useConfig: vi.fn()};
 });
 
 const {useAsgardeo} = await import('@asgardeo/react');
-const {useConfig} = await import('@thunder/contexts');
+const {useConfig} = await import('@thunderid/contexts');
 
 describe('useCreateUserType', () => {
   const mockUserSchema: ApiUserSchema = {

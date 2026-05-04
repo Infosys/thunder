@@ -17,7 +17,7 @@
  */
 
 import {AcceptInvite, useAsgardeo, type EmbeddedFlowComponent} from '@asgardeo/react';
-import {useConfig} from '@thunder/contexts';
+import {useConfig} from '@thunderid/contexts';
 import {useDesign, FlowComponentRenderer, AuthCardLayout} from '@thunderid/design';
 import {useLogger} from '@thunderid/logger/react';
 import {Box, Alert, Typography, AlertTitle, CircularProgress} from '@wso2/oxygen-ui';

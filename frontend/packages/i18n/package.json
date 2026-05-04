@@ -26,7 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@thunder/contexts": "workspace:^"
+    "@thunderid/contexts": "workspace:^"
   },
   "peerDependencies": {
     "@asgardeo/react": "catalog:",

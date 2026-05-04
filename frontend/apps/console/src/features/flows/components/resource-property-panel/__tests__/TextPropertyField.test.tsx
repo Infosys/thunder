@@ -33,7 +33,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock contexts
-vi.mock('@thunder/contexts', () => ({
+vi.mock('@thunderid/contexts', () => ({
   useConfig: () => ({
     getServerUrl: () => 'https://localhost:8090',
   }),

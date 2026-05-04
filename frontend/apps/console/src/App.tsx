@@ -36,7 +36,7 @@ import {
   UserInvitePage,
   UsersListPage,
 } from '@thunderid/configure-users';
-import {ToastProvider} from '@thunder/contexts';
+import {ToastProvider} from '@thunderid/contexts';
 import type {JSX} from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router';
 import ApplicationCreateProvider from './features/applications/contexts/ApplicationCreate/ApplicationCreateProvider';

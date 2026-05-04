@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import {useConfig} from '@thunder/contexts';
+import {useConfig} from '@thunderid/contexts';
 import {useLogger} from '@thunderid/logger';
 import {Box, Typography, Stack, Card, CardContent, Divider, Paper, IconButton, Tooltip} from '@wso2/oxygen-ui';
 import {Sparkles, Copy} from '@wso2/oxygen-ui-icons-react';

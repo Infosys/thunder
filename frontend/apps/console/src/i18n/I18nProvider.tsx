@@ -18,7 +18,7 @@
 
 import {useAsgardeo} from '@asgardeo/react';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useConfig} from '@thunder/contexts';
+import {useConfig} from '@thunderid/contexts';
 import {I18nQueryKeys} from '@thunderid/i18n';
 import {type ReactElement, type ReactNode, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';

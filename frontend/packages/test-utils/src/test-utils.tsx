@@ -26,7 +26,7 @@ import {
   type RenderHookOptions,
   type RenderResult,
 } from '@testing-library/react';
-import {ConfigProvider, ToastProvider} from '@thunder/contexts';
+import {ConfigProvider, ToastProvider} from '@thunderid/contexts';
 import {LoggerProvider, LogLevel} from '@thunderid/logger';
 import {OxygenUIThemeProvider} from '@wso2/oxygen-ui';
 import {useMemo, type ReactElement, type ReactNode} from 'react';

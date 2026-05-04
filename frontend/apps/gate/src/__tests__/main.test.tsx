@@ -73,7 +73,7 @@ vi.mock('@thunderid/i18n/locales/en-US', () => ({
 }));
 
 // Mock contexts
-vi.mock('@thunder/contexts', () => ({
+vi.mock('@thunderid/contexts', () => ({
   ConfigProvider: ({children}: {children: React.ReactNode}) => children,
 }));
 

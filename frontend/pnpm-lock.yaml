@@ -331,7 +331,7 @@ importers:
       '@thunderid/configure-users':
         specifier: workspace:^
         version: link:../../packages/configure-users
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../../packages/contexts
       '@thunderid/design':
@@ -515,7 +515,7 @@ importers:
       '@tanstack/react-query-devtools':
         specifier: 'catalog:'
         version: 5.90.2(@tanstack/react-query@5.90.5(react@19.2.3))(react@19.2.3)
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../../packages/contexts
       '@thunderid/design':
@@ -621,7 +621,7 @@ importers:
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.90.5(react@19.2.3)
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../contexts
       '@thunderid/design':
@@ -712,7 +712,7 @@ importers:
       '@thunderid/components':
         specifier: workspace:^
         version: link:../components
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../contexts
       '@thunderid/design':
@@ -818,7 +818,7 @@ importers:
       '@thunderid/components':
         specifier: workspace:^
         version: link:../components
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../contexts
       '@thunderid/hooks':
@@ -909,7 +909,7 @@ importers:
       '@thunderid/components':
         specifier: workspace:^
         version: link:../components
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../contexts
       '@thunderid/design':
@@ -1119,7 +1119,7 @@ importers:
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.90.5(react@19.2.3)
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../contexts
       '@thunderid/logger':
@@ -1368,7 +1368,7 @@ importers:
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.90.5(react@19.2.3)
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../contexts
       i18next:
@@ -1501,7 +1501,7 @@ importers:
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.90.5(react@19.2.3)
-      '@thunder/contexts':
+      '@thunderid/contexts':
         specifier: workspace:^
         version: link:../contexts
       '@thunderid/eslint-plugin-thunder':

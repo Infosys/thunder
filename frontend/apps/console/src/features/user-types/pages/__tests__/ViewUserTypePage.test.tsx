@@ -92,8 +92,8 @@ vi.mock('@thunderid/configure-organization-units', () => ({
 }));
 
 // Mock shared-contexts (useToast)
-vi.mock('@thunder/contexts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@thunder/contexts')>();
+vi.mock('@thunderid/contexts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {
     ...actual,
     useToast: () => ({showToast: mockShowToast}),

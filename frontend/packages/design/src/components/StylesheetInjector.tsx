@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import {useConfig} from '@thunder/contexts';
+import {useConfig} from '@thunderid/contexts';
 import {createLogger} from '@thunderid/logger';
 import {useEffect} from 'react';
 import useDesign from '../contexts/Design/useDesign';

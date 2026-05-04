@@ -22,8 +22,8 @@ import {describe, it, expect, vi, beforeEach, afterEach} from 'vitest';
 import type {IntegrationGuides} from '../../../../models/application-templates';
 import TechnologyGuide from '../TechnologyGuide';
 
-vi.mock('@thunder/contexts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@thunder/contexts')>();
+vi.mock('@thunderid/contexts', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@thunderid/contexts')>();
   return {
     ...actual,
     useConfig: () => ({config: {brand: {product_name: 'Thunder'}}}),
