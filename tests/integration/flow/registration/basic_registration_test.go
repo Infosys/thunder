@@ -98,14 +98,19 @@ func (ts *BasicRegistrationFlowTestSuite) SetupSuite() {
 	ts.userSchemaID = schemaID
 	ts.testUserTypeName = testUserSchema.Name
 
+	// Look up the default registration flow ID
+	regFlowID, err := testutils.GetFlowIDByHandle("default-basic-flow", "REGISTRATION")
+	if err != nil {
+		ts.T().Fatalf("Failed to get default registration flow ID: %v", err)
+	}
+
 	// Create test application with allowed user types
-	// Application relies on the default flow set by the server. Hence no need
-	// to set the flow IDs here.
 	testApp := testutils.Application{
 		OUID:                      ts.testOUID,
 		Name:                      "Registration Flow Test Application",
 		Description:               "Application for testing registration flows",
 		IsRegistrationFlowEnabled: true,
+		RegistrationFlowID:        regFlowID,
 		ClientID:                  "reg_flow_test_client",
 		ClientSecret:              "reg_flow_test_secret",
 		RedirectURIs:              []string{"http://localhost:3000/callback"},
@@ -414,12 +419,17 @@ func (ts *BasicRegistrationFlowTestSuite) TestBasicRegistrationFlowSingleRequest
 // TestBasicRegistrationFlow_WithoutTokenConfig tests that userType and OU attributes are NOT included
 // in JWT assertion when TokenConfig is not specified.
 func (ts *BasicRegistrationFlowTestSuite) TestBasicRegistrationFlow_WithoutTokenConfig() {
+	// Look up the default registration flow
+	regFlowID, err := testutils.GetFlowIDByHandle("default-basic-flow", "REGISTRATION")
+	ts.Require().NoError(err, "Failed to get default registration flow ID")
+
 	// Create a new application without TokenConfig
 	appWithoutTokenConfig := testutils.Application{
 		Name:                      "Registration Flow Test Application Without Token Config",
 		OUID:                      ts.testOUID,
 		Description:               "Application for testing default behavior without token config",
 		IsRegistrationFlowEnabled: true,
+		RegistrationFlowID:        regFlowID,
 		ClientID:                  "reg_flow_test_client_no_token_config",
 		ClientSecret:              "reg_flow_test_secret_no_token_config",
 		RedirectURIs:              []string{"http://localhost:3000/callback"},
@@ -481,12 +491,17 @@ func (ts *BasicRegistrationFlowTestSuite) TestBasicRegistrationFlow_WithoutToken
 // TestBasicRegistrationFlow_WithEmptyUserAttributes tests that userType and OU attributes are NOT included
 // in JWT assertion when user_attributes is an empty array.
 func (ts *BasicRegistrationFlowTestSuite) TestBasicRegistrationFlow_WithEmptyUserAttributes() {
+	// Look up the default registration flow
+	regFlowID, err := testutils.GetFlowIDByHandle("default-basic-flow", "REGISTRATION")
+	ts.Require().NoError(err, "Failed to get default registration flow ID")
+
 	// Create a new application with empty user_attributes
 	appWithEmptyAttrs := testutils.Application{
 		Name:                      "Registration Flow Test Application With Empty User Attributes",
 		OUID:                      ts.testOUID,
 		Description:               "Application for testing behavior with empty user_attributes",
 		IsRegistrationFlowEnabled: true,
+		RegistrationFlowID:        regFlowID,
 		ClientID:                  "reg_flow_test_client_empty_attrs",
 		ClientSecret:              "reg_flow_test_secret_empty_attrs",
 		RedirectURIs:              []string{"http://localhost:3000/callback"},
@@ -904,10 +919,14 @@ func (ts *BasicRegistrationFlowTestSuite) TestSchemaDriverInputs_DisplayNameUsed
 		}
 	}()
 
+	regFlowID, err := testutils.GetFlowIDByHandle("default-basic-flow", "REGISTRATION")
+	ts.Require().NoError(err, "Failed to get default registration flow ID")
+
 	appID, err := testutils.CreateApplication(testutils.Application{
 		OUID:                      ts.testOUID,
 		Name:                      "DisplayName Label Test App",
 		IsRegistrationFlowEnabled: true,
+		RegistrationFlowID:        regFlowID,
 		ClientID:                  "dn_label_test_client",
 		ClientSecret:              "dn_label_test_secret",
 		RedirectURIs:              []string{"http://localhost:3000/callback"},
