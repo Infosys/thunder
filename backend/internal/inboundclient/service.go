@@ -446,7 +446,7 @@ func (s *inboundClientService) resolveFlowDefaults(ctx context.Context, c *inbou
 		}
 		c.AuthFlowID = flow.ID
 	}
-	if c.RegistrationFlowID == "" && c.AuthFlowID != "" {
+	if c.RegistrationFlowID == "" && c.AuthFlowID != "" && config.GetServerRuntime().Config.Flow.AutoInferRegistration {
 		authFlow, svcErr := s.flowMgt.GetFlow(ctx, c.AuthFlowID)
 		if svcErr != nil {
 			if svcErr.Type == serviceerror.ServerErrorType {

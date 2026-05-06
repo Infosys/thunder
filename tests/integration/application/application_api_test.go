@@ -3698,17 +3698,16 @@ func (ts *ApplicationAPITestSuite) TestApplicationCreateWithDefaultAuthFlowID() 
 	ts.Assert().NotEmpty(retrievedApp.AuthFlowID)
 }
 
-// TestApplicationCreateWithInferredRegistrationFlowID tests creating application with registration
-// flow inferred from auth flow
-func (ts *ApplicationAPITestSuite) TestApplicationCreateWithInferredRegistrationFlowID() {
+// TestApplicationCreateWithoutRegistrationFlowID tests creating application without a registration
+// flow ID when auto-inference is disabled (default). The registration flow ID should remain empty.
+func (ts *ApplicationAPITestSuite) TestApplicationCreateWithoutRegistrationFlowID() {
 	app := Application{
 		OUID:                      testOUID,
-		Name:                      "Inferred Registration Flow Test",
-		Description:               "Test registration flow inference",
+		Name:                      "No Registration Flow Test",
+		Description:               "Test that registration flow is not inferred when auto-inference is disabled",
 		IsRegistrationFlowEnabled: true,
 		AuthFlowID:                defaultAuthFlowID,
-		// RegistrationFlowID not set - should be inferred from auth flow
-		Certificate: nil,
+		Certificate:               nil,
 	}
 
 	appID, err := createApplication(app)
@@ -3718,9 +3717,8 @@ func (ts *ApplicationAPITestSuite) TestApplicationCreateWithInferredRegistration
 	retrievedApp, err := getApplicationByID(appID)
 	ts.Require().NoError(err)
 
-	// Verify registration flow ID was inferred
-	ts.Assert().NotEmpty(retrievedApp.RegistrationFlowID)
-	ts.Assert().Equal(defaultRegistrationFlowID, retrievedApp.RegistrationFlowID)
+	// Verify registration flow ID was not inferred (auto-inference is disabled by default)
+	ts.Assert().Empty(retrievedApp.RegistrationFlowID)
 }
 
 // TestApplicationUpdateRemoveCertificate tests updating application to remove certificate
