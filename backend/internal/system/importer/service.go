@@ -110,12 +110,15 @@ type roleAdapter interface {
 	GetRoleWithPermissions(ctx context.Context, id string) (*role.RoleWithPermissions, *serviceerror.ServiceError)
 	UpdateRoleWithPermissions(ctx context.Context, id string, role role.RoleUpdateDetail) (*role.RoleWithPermissions,
 		*serviceerror.ServiceError)
+	AddAssignments(ctx context.Context, id string, assignments []role.RoleAssignment) *serviceerror.ServiceError
 }
 
 type groupAdapter interface {
 	CreateGroup(ctx context.Context, request group.CreateGroupRequest) (*group.Group, *serviceerror.ServiceError)
 	GetGroup(ctx context.Context, groupID string, includeDisplay bool) (*group.Group, *serviceerror.ServiceError)
 	UpdateGroup(ctx context.Context, groupID string, request group.UpdateGroupRequest) (
+		*group.Group, *serviceerror.ServiceError)
+	AddGroupMembers(ctx context.Context, groupID string, members []group.Member) (
 		*group.Group, *serviceerror.ServiceError)
 }
 
@@ -127,6 +130,8 @@ type resourceServerAdapter interface {
 		*serviceerror.ServiceError)
 	CreateResource(ctx context.Context, resourceServerID string, res resource.Resource) (
 		*resource.Resource, *serviceerror.ServiceError)
+	GetResourceList(ctx context.Context, resourceServerID string, parentID *string, limit, offset int) (
+		*resource.ResourceList, *serviceerror.ServiceError)
 	CreateAction(ctx context.Context, resourceServerID string, resourceID *string, action resource.Action) (
 		*resource.Action, *serviceerror.ServiceError)
 }

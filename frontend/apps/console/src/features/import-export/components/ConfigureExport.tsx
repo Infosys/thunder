@@ -1025,7 +1025,7 @@ export default function ConfigureExport({
 
   // Add groups if present
   if (groupsCount > 0) {
-    const groups = (configData?.group as {name?: string; description?: string}[]) ?? [];
+    const groups = (configData?.group as {id?: string; name?: string; description?: string}[]) ?? [];
     const displayedGroups = expandedGroups ? groups : groups.slice(0, 5);
     const remainingCount = groups.length - 5;
 
@@ -1041,7 +1041,7 @@ export default function ConfigureExport({
           <Stack spacing={2}>
             <Stack spacing={2} divider={<Box sx={{borderBottom: 1, borderColor: 'divider'}} />}>
               {displayedGroups.map((group, idx) => (
-                <Stack key={group.name ?? `group-${idx}`} spacing={0.5}>
+                <Stack key={group.id ?? group.name ?? `group-${idx}`} spacing={0.5}>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Users size={14} />
                     <Typography variant="body2" fontWeight={600}>

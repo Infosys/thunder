@@ -215,6 +215,11 @@ func classifyResourceType(node *yaml.Node) string {
 		matches = append(matches, resourceTypeApplication)
 	}
 
+	if hasAllKeys(node, "name", "ou_id") &&
+		!hasAnyKey(node, "handle", "permissions", "identifier", "type", "flowType", "displayName", "properties") {
+		matches = append(matches, resourceTypeGroup)
+	}
+
 	if hasAllKeys(node, "handle", "name") &&
 		!hasAnyKey(node, "flowType", "nodes", "auth_flow_id", "registration_flow_id", "inbound_auth_config") {
 		matches = append(matches, resourceTypeOrganizationUnit)

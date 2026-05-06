@@ -32,6 +32,7 @@ import (
 	"github.com/asgardeo/thunder/internal/entitytype"
 	"github.com/asgardeo/thunder/internal/flow/common"
 	flowmgt "github.com/asgardeo/thunder/internal/flow/mgt"
+	"github.com/asgardeo/thunder/internal/group"
 	"github.com/asgardeo/thunder/internal/idp"
 	inboundmodel "github.com/asgardeo/thunder/internal/inboundclient/model"
 	"github.com/asgardeo/thunder/internal/ou"
@@ -441,7 +442,9 @@ func (f *fakeOUService) UpdateOrganizationUnit(
 }
 
 type fakeRoleService struct {
-	updated []role.RoleUpdateDetail
+	updated       []role.RoleUpdateDetail
+	assignments   []role.RoleAssignment
+	assignmentErr *serviceerror.ServiceError
 }
 
 func (f *fakeRoleService) CreateRole(
@@ -457,11 +460,7 @@ func (f *fakeRoleService) GetRoleWithPermissions(
 		return &role.RoleWithPermissions{ID: id, Name: "role"}, nil
 	}
 
-	return nil, &serviceerror.ServiceError{
-		Type:  serviceerror.ClientErrorType,
-		Code:  "ROLE-1001",
-		Error: core.I18nMessage{DefaultValue: "not found"},
-	}
+	return nil, &role.ErrorRoleNotFound
 }
 
 func (f *fakeRoleService) UpdateRoleWithPermissions(
@@ -469,6 +468,62 @@ func (f *fakeRoleService) UpdateRoleWithPermissions(
 ) (*role.RoleWithPermissions, *serviceerror.ServiceError) {
 	f.updated = append(f.updated, req)
 	return &role.RoleWithPermissions{ID: "role-1", Name: req.Name}, nil
+}
+
+func (f *fakeRoleService) AddAssignments(
+	_ context.Context, _ string, assignments []role.RoleAssignment,
+) *serviceerror.ServiceError {
+	if f.assignmentErr != nil {
+		return f.assignmentErr
+	}
+	f.assignments = append(f.assignments, assignments...)
+	return nil
+}
+
+type fakeGroupService struct {
+	created   []group.CreateGroupRequest
+	members   []group.Member
+	memberErr *serviceerror.ServiceError
+}
+
+func (f *fakeGroupService) CreateGroup(
+	_ context.Context, req group.CreateGroupRequest,
+) (*group.Group, *serviceerror.ServiceError) {
+	id := req.ID
+	if id == "" {
+		id = "generated-group-id"
+	}
+	f.created = append(f.created, req)
+	return &group.Group{ID: id, Name: req.Name}, nil
+}
+
+func (f *fakeGroupService) GetGroup(
+	_ context.Context, id string, _ bool,
+) (*group.Group, *serviceerror.ServiceError) {
+	if id == "group-1" {
+		return &group.Group{ID: id, Name: "Admins"}, nil
+	}
+	return nil, &serviceerror.ServiceError{
+		Type:  serviceerror.ClientErrorType,
+		Code:  group.ErrorGroupNotFound.Code,
+		Error: core.I18nMessage{DefaultValue: "not found"},
+	}
+}
+
+func (f *fakeGroupService) UpdateGroup(
+	_ context.Context, id string, req group.UpdateGroupRequest,
+) (*group.Group, *serviceerror.ServiceError) {
+	return &group.Group{ID: id, Name: req.Name}, nil
+}
+
+func (f *fakeGroupService) AddGroupMembers(
+	_ context.Context, _ string, members []group.Member,
+) (*group.Group, *serviceerror.ServiceError) {
+	if f.memberErr != nil {
+		return nil, f.memberErr
+	}
+	f.members = append(f.members, members...)
+	return &group.Group{}, nil
 }
 
 type fakeUserService struct {
@@ -815,7 +870,7 @@ func TestImportResources_ApplicationAdapterNotConfigured(t *testing.T) {
 	assert.Equal(t, "application adapter not configured", resp.Results[0].Message)
 }
 
-func TestImportResources_RoleImportDropsAssignments(t *testing.T) {
+func TestImportResources_RoleImportIncludesAssignments(t *testing.T) {
 	roleSvc := &fakeRoleService{}
 	svc := newImportService(nil, nil, nil, nil, nil, roleSvc, nil, nil, nil, nil, nil, nil)
 
@@ -828,8 +883,8 @@ func TestImportResources_RoleImportDropsAssignments(t *testing.T) {
 		"    actions:",
 		"      - read",
 		"assignments:",
-		"  - type: USER",
-		"    value: u1",
+		"  - type: group",
+		"    id: g1",
 		"",
 	}, "\n")
 
@@ -840,6 +895,184 @@ func TestImportResources_RoleImportDropsAssignments(t *testing.T) {
 	require.Len(t, resp.Results, 1)
 	assert.Equal(t, statusSuccess, resp.Results[0].Status)
 	assert.Equal(t, operationUpdate, resp.Results[0].Operation)
+	require.Len(t, roleSvc.assignments, 1)
+	assert.Equal(t, "g1", roleSvc.assignments[0].ID)
+	assert.Equal(t, role.AssigneeTypeGroup, roleSvc.assignments[0].Type)
+}
+
+func TestImportResources_GroupImportIncludesMembers(t *testing.T) {
+	groupSvc := &fakeGroupService{}
+	svc := newImportService(nil, nil, nil, nil, nil, nil, groupSvc, nil, nil, nil, nil, nil)
+
+	content := strings.Join([]string{
+		"id: group-new",
+		"name: Engineers",
+		"ou_id: ou-1",
+		"members:",
+		"  - id: user-1",
+		"    type: user",
+		"",
+	}, "\n")
+
+	resp, err := svc.ImportResources(context.Background(), &ImportRequest{Content: content})
+
+	require.Nil(t, err)
+	require.NotNil(t, resp)
+	require.Len(t, resp.Results, 1)
+	assert.Equal(t, statusSuccess, resp.Results[0].Status)
+	assert.Equal(t, operationCreate, resp.Results[0].Operation)
+	require.Len(t, groupSvc.members, 1)
+	assert.Equal(t, "user-1", groupSvc.members[0].ID)
+	assert.Equal(t, group.MemberTypeUser, groupSvc.members[0].Type)
+}
+
+func TestImportResources_RoleImportNoAssignments(t *testing.T) {
+	roleSvc := &fakeRoleService{}
+	svc := newImportService(nil, nil, nil, nil, nil, roleSvc, nil, nil, nil, nil, nil, nil)
+
+	content := strings.Join([]string{
+		"id: role-new",
+		"name: Viewer",
+		"ou_id: ou-1",
+		"permissions: []",
+		"",
+	}, "\n")
+
+	resp, err := svc.ImportResources(context.Background(), &ImportRequest{Content: content})
+
+	require.Nil(t, err)
+	require.Len(t, resp.Results, 1)
+	assert.Equal(t, statusSuccess, resp.Results[0].Status)
+	assert.Equal(t, operationCreate, resp.Results[0].Operation)
+	assert.Empty(t, roleSvc.assignments)
+}
+
+func TestImportResources_RoleUpsertUpdateIncludesAssignments(t *testing.T) {
+	roleSvc := &fakeRoleService{}
+	svc := newImportService(nil, nil, nil, nil, nil, roleSvc, nil, nil, nil, nil, nil, nil)
+
+	content := strings.Join([]string{
+		"id: role-1",
+		"name: Admin",
+		"ou_id: ou-1",
+		"permissions: []",
+		"assignments:",
+		"  - type: group",
+		"    id: g-99",
+		"",
+	}, "\n")
+
+	resp, err := svc.ImportResources(context.Background(), &ImportRequest{
+		Content: content,
+		Options: &ImportOptions{Upsert: boolPtr(true)},
+	})
+
+	require.Nil(t, err)
+	require.Len(t, resp.Results, 1)
+	assert.Equal(t, statusSuccess, resp.Results[0].Status)
+	assert.Equal(t, operationUpdate, resp.Results[0].Operation)
+	require.Len(t, roleSvc.assignments, 1)
+	assert.Equal(t, "g-99", roleSvc.assignments[0].ID)
+}
+
+func TestImportResources_RoleAssignmentFailureReturnsError(t *testing.T) {
+	roleSvc := &fakeRoleService{assignmentErr: &serviceerror.ServiceError{
+		Type:  serviceerror.ClientErrorType,
+		Code:  "ROLE-4001",
+		Error: core.I18nMessage{DefaultValue: "invalid assignee"},
+	}}
+	svc := newImportService(nil, nil, nil, nil, nil, roleSvc, nil, nil, nil, nil, nil, nil)
+
+	// role-1 exists in the fake → update path → AddAssignments is called separately → fails
+	content := strings.Join([]string{
+		"id: role-1",
+		"name: Admin",
+		"ou_id: ou-1",
+		"permissions: []",
+		"assignments:",
+		"  - type: group",
+		"    id: g1",
+		"",
+	}, "\n")
+
+	resp, err := svc.ImportResources(context.Background(), &ImportRequest{Content: content})
+
+	require.Nil(t, err)
+	require.Len(t, resp.Results, 1)
+	assert.Equal(t, statusFailed, resp.Results[0].Status)
+}
+
+func TestImportResources_GroupImportNoMembers(t *testing.T) {
+	groupSvc := &fakeGroupService{}
+	svc := newImportService(nil, nil, nil, nil, nil, nil, groupSvc, nil, nil, nil, nil, nil)
+
+	content := strings.Join([]string{
+		"id: group-new",
+		"name: Empty",
+		"ou_id: ou-1",
+		"",
+	}, "\n")
+
+	resp, err := svc.ImportResources(context.Background(), &ImportRequest{Content: content})
+
+	require.Nil(t, err)
+	require.Len(t, resp.Results, 1)
+	assert.Equal(t, statusSuccess, resp.Results[0].Status)
+	assert.Equal(t, operationCreate, resp.Results[0].Operation)
+	assert.Empty(t, groupSvc.members)
+}
+
+func TestImportResources_GroupUpsertUpdateIncludesMembers(t *testing.T) {
+	groupSvc := &fakeGroupService{}
+	svc := newImportService(nil, nil, nil, nil, nil, nil, groupSvc, nil, nil, nil, nil, nil)
+
+	content := strings.Join([]string{
+		"id: group-1",
+		"name: Admins",
+		"ou_id: ou-1",
+		"members:",
+		"  - id: u-99",
+		"    type: user",
+		"",
+	}, "\n")
+
+	resp, err := svc.ImportResources(context.Background(), &ImportRequest{
+		Content: content,
+		Options: &ImportOptions{Upsert: boolPtr(true)},
+	})
+
+	require.Nil(t, err)
+	require.Len(t, resp.Results, 1)
+	assert.Equal(t, statusSuccess, resp.Results[0].Status)
+	assert.Equal(t, operationUpdate, resp.Results[0].Operation)
+	require.Len(t, groupSvc.members, 1)
+	assert.Equal(t, "u-99", groupSvc.members[0].ID)
+	assert.Equal(t, group.MemberTypeUser, groupSvc.members[0].Type)
+}
+
+func TestImportResources_GroupMemberFailureReturnsError(t *testing.T) {
+	groupSvc := &fakeGroupService{memberErr: &serviceerror.ServiceError{
+		Type:  serviceerror.ClientErrorType,
+		Code:  "GRP-4001",
+		Error: core.I18nMessage{DefaultValue: "invalid member"},
+	}}
+	svc := newImportService(nil, nil, nil, nil, nil, nil, groupSvc, nil, nil, nil, nil, nil)
+
+	content := strings.Join([]string{
+		"id: group-new",
+		"name: Engineers",
+		"ou_id: ou-1",
+		"members:",
+		"  - id: u1",
+		"    type: user",
+		"",
+	}, "\n")
+
+	resp, err := svc.ImportResources(context.Background(), &ImportRequest{Content: content})
+
+	require.Nil(t, err)
+	require.Len(t, resp.Results, 1)
+	assert.Equal(t, statusFailed, resp.Results[0].Status)
 }
 
 func TestImportResources_UserCredentialFailureRollsBackCreate(t *testing.T) {

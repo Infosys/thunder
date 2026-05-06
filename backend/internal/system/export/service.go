@@ -136,7 +136,14 @@ func (es *exportService) ExportResources(
 	}
 
 	// Export resources using the registry
-	for resourceType, resourceIDs := range resourceMap {
+	resourceTypes := make([]string, 0, len(resourceMap))
+	for k := range resourceMap {
+		resourceTypes = append(resourceTypes, k)
+	}
+	sort.Strings(resourceTypes)
+
+	for _, resourceType := range resourceTypes {
+		resourceIDs := resourceMap[resourceType]
 		if len(resourceIDs) == 0 {
 			continue
 		}

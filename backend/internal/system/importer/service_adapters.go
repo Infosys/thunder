@@ -35,6 +35,7 @@ import (
 
 	layoutmgt "github.com/asgardeo/thunder/internal/design/layout/mgt"
 	thememgt "github.com/asgardeo/thunder/internal/design/theme/mgt"
+	serverconst "github.com/asgardeo/thunder/internal/system/constants"
 )
 
 type roleDeclarativeYAML struct {
@@ -257,8 +258,7 @@ func (s *importService) importRole(
 		Description: req.Description,
 		OUID:        req.OUID,
 		Permissions: req.Permissions,
-		// Assignments are not imported — they reference entity/group IDs from the source system
-		// which may not exist in the target system.
+		Assignments: req.Assignments,
 	}
 	updateReq := role.RoleUpdateDetail{
 		Name:        req.Name,
@@ -288,6 +288,11 @@ func (s *importService) importRole(
 			updated, updateErr := s.roleService.UpdateRoleWithPermissions(ctx, req.ID, updateReq)
 			if updateErr != nil {
 				return serviceErrorOutcome(resourceTypeRole, req.ID, req.Name, operationUpdate, updateErr)
+			}
+			if len(req.Assignments) > 0 {
+				if assignErr := s.roleService.AddAssignments(ctx, updated.ID, req.Assignments); assignErr != nil {
+					return serviceErrorOutcome(resourceTypeRole, updated.ID, updated.Name, operationUpdate, assignErr)
+				}
 			}
 			return successOutcome(resourceTypeRole, updated.ID, updated.Name, operationUpdate)
 		}
@@ -328,7 +333,6 @@ func (s *importService) importGroup(
 		Name:        raw.Name,
 		Description: raw.Description,
 		OUID:        raw.OUID,
-		// Members are not imported — they reference entity/group IDs from the source system.
 	}
 
 	updateReq := group.UpdateGroupRequest{
@@ -357,6 +361,11 @@ func (s *importService) importGroup(
 			if updateErr != nil {
 				return serviceErrorOutcome(resourceTypeGroup, raw.ID, raw.Name, operationUpdate, updateErr)
 			}
+			if len(raw.Members) > 0 {
+				if _, memberErr := s.groupService.AddGroupMembers(ctx, updated.ID, raw.Members); memberErr != nil {
+					return serviceErrorOutcome(resourceTypeGroup, updated.ID, updated.Name, operationUpdate, memberErr)
+				}
+			}
 			return successOutcome(resourceTypeGroup, updated.ID, updated.Name, operationUpdate)
 		}
 		if !isNotFoundServiceError(svcErr) {
@@ -367,6 +376,11 @@ func (s *importService) importGroup(
 	grp, svcErr := s.groupService.CreateGroup(ctx, req)
 	if svcErr != nil {
 		return serviceErrorOutcome(resourceTypeGroup, raw.ID, raw.Name, operationCreate, svcErr)
+	}
+	if len(raw.Members) > 0 {
+		if _, memberErr := s.groupService.AddGroupMembers(ctx, grp.ID, raw.Members); memberErr != nil {
+			return serviceErrorOutcome(resourceTypeGroup, grp.ID, grp.Name, operationCreate, memberErr)
+		}
 	}
 	return successOutcome(resourceTypeGroup, grp.ID, grp.Name, operationCreate)
 }
@@ -724,16 +738,49 @@ func (s *importService) importResourceServerChildren(
 		}
 	}
 
+	// handleToID maps resource handle → created/resolved ID for parent resolution.
+	handleToID := make(map[string]string)
+
 	for i := range rs.Resources {
 		res := rs.Resources[i]
+
+		// Resolve ParentHandle to the parent ID using handles seen so far in this import.
+		if res.ParentHandle != "" {
+			if parentID, ok := handleToID[res.ParentHandle]; ok {
+				res.Parent = &parentID
+			}
+		}
+
 		created, svcErr := s.resourceService.CreateResource(ctx, serverID, res)
 		if svcErr != nil {
-			// Skip if it already exists (handle conflict) to support upsert paths.
-			if svcErr.Code == resource.ErrorHandleConflict.Code {
+			if svcErr.Code != resource.ErrorHandleConflict.Code {
+				return svcErr
+			}
+			// Resource already exists — look it up under the same parent scope to get its ID.
+			var parentID *string
+			if res.ParentHandle != "" {
+				if pid, ok := handleToID[res.ParentHandle]; ok {
+					parentID = &pid
+				}
+			}
+			list, listErr := s.resourceService.GetResourceList(ctx, serverID, parentID, serverconst.MaxPageSize, 0)
+			if listErr != nil {
+				return listErr
+			}
+			var existingID string
+			for j := range list.Resources {
+				if list.Resources[j].Handle == res.Handle {
+					existingID = list.Resources[j].ID
+					break
+				}
+			}
+			if existingID == "" {
 				continue
 			}
-			return svcErr
+			created = &resource.Resource{ID: existingID}
 		}
+
+		handleToID[res.Handle] = created.ID
 
 		for j := range res.Actions {
 			action := res.Actions[j]
