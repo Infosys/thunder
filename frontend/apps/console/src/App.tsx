@@ -70,6 +70,7 @@ import UserTypeCreateProvider from './features/user-types/contexts/UserTypeCreat
 import CreateUserTypePage from './features/user-types/pages/CreateUserTypePage';
 import UserTypesListPage from './features/user-types/pages/UserTypesListPage';
 import ViewUserTypePage from './features/user-types/pages/ViewUserTypePage';
+import WelcomeRedirect from './features/welcome/components/WelcomeRedirect';
 import CreateProjectPage from './features/welcome/pages/CreateProjectPage';
 import WelcomePage from './features/welcome/pages/WelcomePage';
 import DashboardLayout from './layouts/DashboardLayout';
@@ -79,6 +80,7 @@ export default function App(): JSX.Element {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ToastProvider>
+        <WelcomeRedirect />
         <Routes>
           <Route
             path="/"
