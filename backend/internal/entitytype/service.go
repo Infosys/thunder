@@ -162,7 +162,7 @@ func (us *entityTypeService) listAllEntityTypes(
 		TotalResults: totalCount,
 		StartIndex:   offset + 1,
 		Count:        len(entityTypes),
-		Schemas:      entityTypes,
+		Types:        entityTypes,
 		Links: buildPaginationLinks(category, limit, offset, totalCount,
 			utils.DisplayQueryParam(includeDisplay)),
 	}, nil
@@ -180,7 +180,7 @@ func (us *entityTypeService) listAccessibleEntityTypes(
 			TotalResults: 0,
 			StartIndex:   offset + 1,
 			Count:        0,
-			Schemas:      []EntityTypeListItem{},
+			Types:        []EntityTypeListItem{},
 			Links:        buildPaginationLinks(category, limit, offset, 0, displayQuery),
 		}, nil
 	}
@@ -203,7 +203,7 @@ func (us *entityTypeService) listAccessibleEntityTypes(
 		TotalResults: totalCount,
 		StartIndex:   offset + 1,
 		Count:        len(entityTypes),
-		Schemas:      entityTypes,
+		Types:        entityTypes,
 		Links:        buildPaginationLinks(category, limit, offset, totalCount, displayQuery),
 	}, nil
 }
