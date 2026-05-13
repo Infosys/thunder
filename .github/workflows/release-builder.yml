@@ -173,7 +173,10 @@ jobs:
           sed -i -E "s|(https://raw\.githubusercontent\.com/thunder-id/thunderid/)v[0-9]+\.[0-9]+\.[0-9]+(/.+docker-compose\.yml)|\1${VERSION}\2|g" docs/content/guides/getting-started/get-thunderid.mdx
 
           echo "✅ Updated get-thunderid.mdx curl URL to $VERSION"
-          grep 'docker-compose.yml' docs/content/guides/getting-started/get-thunderid.mdx
+          grep -q "thunder-id/thunderid/${VERSION}/install/quick-start/docker-compose.yml" docs/content/guides/getting-started/get-thunderid.mdx || {
+            echo "❌ Error: Failed to update get-thunderid.mdx docker-compose URL to $VERSION"
+            exit 1
+          }
 
       - name: 📝 Update Helm and Sample App Versions
         if: ${{ steps.get_version.outputs.use_existing_version != 'true' }}
