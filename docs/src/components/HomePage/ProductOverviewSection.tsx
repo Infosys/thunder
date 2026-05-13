@@ -297,7 +297,7 @@ const features = [
     ),
     title: 'Every journey is a flow',
     description:
-      'Model and orchestrate identity journeys as composable flows using a drag-and-drop visual flow builder. ',
+      'Model and orchestrate identity journeys as composable flows using a drag-and-drop visual flow builder.',
   },
   {
     icon: (
