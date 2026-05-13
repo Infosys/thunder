@@ -25,13 +25,13 @@ import (
 
 	"encoding/json"
 
-	"github.com/asgardeo/thunder/internal/application/model"
-	"github.com/asgardeo/thunder/internal/entity"
-	"github.com/asgardeo/thunder/internal/inboundclient"
-	inboundmodel "github.com/asgardeo/thunder/internal/inboundclient/model"
-	declarativeresource "github.com/asgardeo/thunder/internal/system/declarative_resource"
-	"github.com/asgardeo/thunder/internal/system/error/serviceerror"
-	"github.com/asgardeo/thunder/internal/system/log"
+	"github.com/thunder-id/thunderid/internal/application/model"
+	"github.com/thunder-id/thunderid/internal/entity"
+	"github.com/thunder-id/thunderid/internal/inboundclient"
+	inboundmodel "github.com/thunder-id/thunderid/internal/inboundclient/model"
+	declarativeresource "github.com/thunder-id/thunderid/internal/system/declarative_resource"
+	"github.com/thunder-id/thunderid/internal/system/error/serviceerror"
+	"github.com/thunder-id/thunderid/internal/system/log"
 
 	"gopkg.in/yaml.v3"
 )
@@ -173,6 +173,8 @@ func parseToApplicationDTO(data []byte) (*model.ApplicationDTO, error) {
 			AuthFlowID:                appRequest.AuthFlowID,
 			RegistrationFlowID:        appRequest.RegistrationFlowID,
 			IsRegistrationFlowEnabled: appRequest.IsRegistrationFlowEnabled,
+			RecoveryFlowID:            appRequest.RecoveryFlowID,
+			IsRecoveryFlowEnabled:     appRequest.IsRecoveryFlowEnabled,
 			ThemeID:                   appRequest.ThemeID,
 			LayoutID:                  appRequest.LayoutID,
 			Assertion:                 appRequest.Assertion,

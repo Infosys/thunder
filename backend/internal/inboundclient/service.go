@@ -26,24 +26,24 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/asgardeo/thunder/internal/cert"
-	"github.com/asgardeo/thunder/internal/consent"
-	layoutmgt "github.com/asgardeo/thunder/internal/design/layout/mgt"
-	thememgt "github.com/asgardeo/thunder/internal/design/theme/mgt"
-	"github.com/asgardeo/thunder/internal/entityprovider"
-	"github.com/asgardeo/thunder/internal/entitytype"
-	flowcommon "github.com/asgardeo/thunder/internal/flow/common"
-	flowmgt "github.com/asgardeo/thunder/internal/flow/mgt"
-	inboundmodel "github.com/asgardeo/thunder/internal/inboundclient/model"
-	oauth2const "github.com/asgardeo/thunder/internal/oauth/oauth2/constants"
-	"github.com/asgardeo/thunder/internal/system/config"
-	serverconst "github.com/asgardeo/thunder/internal/system/constants"
-	"github.com/asgardeo/thunder/internal/system/error/serviceerror"
-	syshttp "github.com/asgardeo/thunder/internal/system/http"
-	"github.com/asgardeo/thunder/internal/system/log"
-	"github.com/asgardeo/thunder/internal/system/security"
-	"github.com/asgardeo/thunder/internal/system/transaction"
-	sysutils "github.com/asgardeo/thunder/internal/system/utils"
+	"github.com/thunder-id/thunderid/internal/cert"
+	"github.com/thunder-id/thunderid/internal/consent"
+	layoutmgt "github.com/thunder-id/thunderid/internal/design/layout/mgt"
+	thememgt "github.com/thunder-id/thunderid/internal/design/theme/mgt"
+	"github.com/thunder-id/thunderid/internal/entityprovider"
+	"github.com/thunder-id/thunderid/internal/entitytype"
+	flowcommon "github.com/thunder-id/thunderid/internal/flow/common"
+	flowmgt "github.com/thunder-id/thunderid/internal/flow/mgt"
+	inboundmodel "github.com/thunder-id/thunderid/internal/inboundclient/model"
+	oauth2const "github.com/thunder-id/thunderid/internal/oauth/oauth2/constants"
+	"github.com/thunder-id/thunderid/internal/system/config"
+	serverconst "github.com/thunder-id/thunderid/internal/system/constants"
+	"github.com/thunder-id/thunderid/internal/system/error/serviceerror"
+	syshttp "github.com/thunder-id/thunderid/internal/system/http"
+	"github.com/thunder-id/thunderid/internal/system/log"
+	"github.com/thunder-id/thunderid/internal/system/security"
+	"github.com/thunder-id/thunderid/internal/system/transaction"
+	sysutils "github.com/thunder-id/thunderid/internal/system/utils"
 )
 
 // InboundClientServiceInterface is the public API of the inbound client subsystem.
@@ -442,7 +442,8 @@ func BuildOAuthClient(entityID, clientID, ouID string, p *inboundmodel.OAuthProf
 	return client
 }
 
-// resolveFlowDefaults fills AuthFlowID and RegistrationFlowID with system defaults when empty.
+// resolveFlowDefaults fills AuthFlowID, RegistrationFlowID, and RecoveryFlowID with system
+// defaults when empty, using the auth flow's handle to locate matching flows of each type.
 func (s *inboundClientService) resolveFlowDefaults(ctx context.Context, c *inboundmodel.InboundClient) error {
 	if s.flowMgt == nil || c == nil {
 		return nil
@@ -474,6 +475,10 @@ func (s *inboundClientService) resolveFlowDefaults(ctx context.Context, c *inbou
 			return ErrFKFlowDefinitionRetrievalFailed
 		}
 		c.RegistrationFlowID = regFlow.ID
+	}
+	if c.RecoveryFlowID == "" {
+		// If a recovery flow is not defined, disable recovery flow for the application.
+		c.IsRecoveryFlowEnabled = false
 	}
 	return nil
 }
@@ -908,6 +913,9 @@ func (s *inboundClientService) validateFKs(ctx context.Context, c *inboundmodel.
 	if err := s.validateRegistrationFlowID(ctx, c.RegistrationFlowID); err != nil {
 		return err
 	}
+	if err := s.validateRecoveryFlowID(ctx, c.RecoveryFlowID); err != nil {
+		return err
+	}
 	if err := s.validateThemeID(c.ThemeID); err != nil {
 		return err
 	}
@@ -946,6 +954,21 @@ func (s *inboundClientService) validateRegistrationFlowID(ctx context.Context, f
 	}
 	if !valid {
 		return ErrFKInvalidRegistrationFlow
+	}
+	return nil
+}
+
+// validateRecoveryFlowID validates that the recovery flow ID exists and is of the correct type.
+func (s *inboundClientService) validateRecoveryFlowID(ctx context.Context, flowID string) error {
+	if flowID == "" || s.flowMgt == nil {
+		return nil
+	}
+	valid, svcErr := s.flowMgt.IsValidFlow(ctx, flowID, flowcommon.FlowTypeRecovery)
+	if svcErr != nil {
+		return ErrFKFlowServerError
+	}
+	if !valid {
+		return ErrFKInvalidRecoveryFlow
 	}
 	return nil
 }
@@ -993,11 +1016,11 @@ func (s *inboundClientService) validateAllowedUserTypes(
 				log.String("error", svcErr.Error.DefaultValue), log.String("code", svcErr.Code))
 			return ErrUserSchemaLookupFailed
 		}
-		for _, schema := range entityTypeList.Schemas {
+		for _, schema := range entityTypeList.Types {
 			existingUserTypes[schema.Name] = true
 		}
-		if len(entityTypeList.Schemas) == 0 ||
-			offset+len(entityTypeList.Schemas) >= entityTypeList.TotalResults {
+		if len(entityTypeList.Types) == 0 ||
+			offset+len(entityTypeList.Types) >= entityTypeList.TotalResults {
 			break
 		}
 		offset += limit
@@ -1031,8 +1054,8 @@ func (s *inboundClientService) validateUserAttributesAgainstAllowedTypes(
 
 	validAttrs := make(map[string]bool)
 	for _, entityTypeName := range allowedEntityTypes {
-		attrInfos, svcErr := s.entityType.GetNonCredentialAttributes(
-			security.WithRuntimeContext(ctx), entitytype.TypeCategoryUser, entityTypeName, false)
+		attrInfos, svcErr := s.entityType.GetAttributes(
+			security.WithRuntimeContext(ctx), entitytype.TypeCategoryUser, entityTypeName, false, true, false)
 		if svcErr != nil {
 			if svcErr.Type == serviceerror.ServerErrorType {
 				return ErrUserSchemaLookupFailed

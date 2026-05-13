@@ -24,15 +24,15 @@ import (
 	"maps"
 	"time"
 
-	"github.com/asgardeo/thunder/internal/flow/common"
-	"github.com/asgardeo/thunder/internal/flow/core"
-	"github.com/asgardeo/thunder/internal/flow/executor"
-	"github.com/asgardeo/thunder/internal/system/cryptolab"
-	"github.com/asgardeo/thunder/internal/system/error/serviceerror"
-	"github.com/asgardeo/thunder/internal/system/log"
-	"github.com/asgardeo/thunder/internal/system/observability"
-	"github.com/asgardeo/thunder/internal/system/observability/event"
-	sysutils "github.com/asgardeo/thunder/internal/system/utils"
+	"github.com/thunder-id/thunderid/internal/flow/common"
+	"github.com/thunder-id/thunderid/internal/flow/core"
+	"github.com/thunder-id/thunderid/internal/flow/executor"
+	"github.com/thunder-id/thunderid/internal/system/cryptolab"
+	"github.com/thunder-id/thunderid/internal/system/error/serviceerror"
+	"github.com/thunder-id/thunderid/internal/system/log"
+	"github.com/thunder-id/thunderid/internal/system/observability"
+	"github.com/thunder-id/thunderid/internal/system/observability/event"
+	sysutils "github.com/thunder-id/thunderid/internal/system/utils"
 )
 
 // flowEngineInterface defines the interface for the flow engine.
@@ -460,6 +460,11 @@ func (fe *flowEngine) shouldUpdateAuthenticatedUser(engineCtx *EngineContext) bo
 	if engineCtx.FlowType == common.FlowTypeUserOnboarding {
 		return executorInst.GetType() == common.ExecutorTypeAuthentication ||
 			executorInst.GetName() == executor.ExecutorNameProvisioning
+	}
+
+	// For recovery flows, update from authentication executors (e.g., OTP verification).
+	if engineCtx.FlowType == common.FlowTypeRecovery {
+		return executorInst.GetType() == common.ExecutorTypeAuthentication
 	}
 
 	return false

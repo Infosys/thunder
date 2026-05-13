@@ -23,19 +23,19 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/asgardeo/thunder/internal/entitytype"
-	"github.com/asgardeo/thunder/internal/group"
-	"github.com/asgardeo/thunder/internal/ou"
-	"github.com/asgardeo/thunder/internal/resource"
-	"github.com/asgardeo/thunder/internal/role"
-	"github.com/asgardeo/thunder/internal/system/error/serviceerror"
-	"github.com/asgardeo/thunder/internal/system/i18n/core"
-	i18nmgt "github.com/asgardeo/thunder/internal/system/i18n/mgt"
-	"github.com/asgardeo/thunder/internal/user"
+	"github.com/thunder-id/thunderid/internal/entitytype"
+	"github.com/thunder-id/thunderid/internal/group"
+	"github.com/thunder-id/thunderid/internal/ou"
+	"github.com/thunder-id/thunderid/internal/resource"
+	"github.com/thunder-id/thunderid/internal/role"
+	"github.com/thunder-id/thunderid/internal/system/error/serviceerror"
+	"github.com/thunder-id/thunderid/internal/system/i18n/core"
+	i18nmgt "github.com/thunder-id/thunderid/internal/system/i18n/mgt"
+	"github.com/thunder-id/thunderid/internal/user"
 
-	layoutmgt "github.com/asgardeo/thunder/internal/design/layout/mgt"
-	thememgt "github.com/asgardeo/thunder/internal/design/theme/mgt"
-	serverconst "github.com/asgardeo/thunder/internal/system/constants"
+	layoutmgt "github.com/thunder-id/thunderid/internal/design/layout/mgt"
+	thememgt "github.com/thunder-id/thunderid/internal/design/theme/mgt"
+	serverconst "github.com/thunder-id/thunderid/internal/system/constants"
 )
 
 type roleDeclarativeYAML struct {
@@ -93,8 +93,20 @@ func (s *importService) importOrganizationUnit(
 		return decodeErrorOutcome(resourceTypeOrganizationUnit, req.ID, req.Name, err)
 	}
 
-	createReq := ou.OrganizationUnitRequestWithID(req)
-	updateReq := ou.OrganizationUnitRequestWithID(req)
+	createReq := ou.OrganizationUnitRequestWithID{
+		ID:              req.ID,
+		Handle:          req.Handle,
+		Name:            req.Name,
+		Description:     req.Description,
+		Parent:          req.Parent,
+		ThemeID:         req.ThemeID,
+		LayoutID:        req.LayoutID,
+		LogoURL:         req.LogoURL,
+		TosURI:          req.TosURI,
+		PolicyURI:       req.PolicyURI,
+		CookiePolicyURI: req.CookiePolicyURI,
+	}
+	updateReq := createReq
 
 	if dryRun {
 		if options.IsUpsertEnabled() && req.ID != "" {
@@ -290,7 +302,13 @@ func (s *importService) importRole(
 				return serviceErrorOutcome(resourceTypeRole, req.ID, req.Name, operationUpdate, updateErr)
 			}
 			if len(req.Assignments) > 0 {
-				if assignErr := s.roleService.AddAssignments(ctx, updated.ID, req.Assignments); assignErr != nil {
+				if s.roleAssignmentService == nil {
+					return serviceErrorOutcome(resourceTypeRole, updated.ID, updated.Name, operationUpdate,
+						serviceerror.CustomServiceError(serviceerror.InternalServerError,
+							core.I18nMessage{DefaultValue: "roleAssignmentService not configured"}))
+				}
+				assignErr := s.roleAssignmentService.AddAssignments(ctx, updated.ID, req.Assignments)
+				if assignErr != nil {
 					return serviceErrorOutcome(resourceTypeRole, updated.ID, updated.Name, operationUpdate, assignErr)
 				}
 			}
